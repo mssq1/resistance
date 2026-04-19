@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resistance Color Code Calculator - Dual Function</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #3498db;
+            --accent2: #2ecc71;
+            --light: #ecf0f1;
+            --dark: #1a252f;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Mode Selection */
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            margin: 25px 0;
+            gap: 10px;
+        }
+        
+        .mode-btn {
+            padding: 15px 30px;
+            background-color: var(--light);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+        }
+        
+        .mode-btn.active {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .mode-btn:nth-child(2).active {
+            background-color: var(--accent2);
+            color: white;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Input Section */
+        .input-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        
+        .resistance-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border 0.3s;
+        }
+        
+        .resistance-input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+        
+        .unit-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .unit-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background-color: var(--light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .unit-option.active {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .tolerance-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .tolerance-option {
+            padding: 12px 5px;
+            text-align: center;
+            background-color: var(--light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tolerance-option.active {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        /* Color Picker Section */
+        .color-picker-section {
+            display: none;
+        }
+        
+        .color-picker-section.active {
+            display: block;
+        }
+        
+        .color-selection {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .color-band-selector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .band-label {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .color-dropdown {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: border 0.3s;
+            background-color: white;
+        }
+        
+        .color-dropdown:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+        
+        .color-preview {
+            width: 100%;
+            height: 30px;
+            border-radius: 4px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .calculate-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .reverse-btn {
+            background-color: var(--accent2);
+            margin-top: 15px;
+        }
+        
+        .reverse-btn:hover {
+            background-color: #27ae60;
+        }
+        
+        /* Result Section */
+        .result-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .resistor-display {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px dashed #ddd;
+        }
+        
+        .resistor-body {
+            width: 100%;
+            height: 60px;
+            background-color: #f1c40f;
+            border-radius: 30px;
+            margin: 20px auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 10px;
+            max-width: 400px;
+        }
+        
+        .resistor-band {
+            width: 18px;
+            height: 100%;
+            border-radius: 2px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .resistor-lead {
+            width: 40px;
+            height: 8px;
+            background-color: #7f8c8d;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .left-lead {
+            left: -40px;
+        }
+        
+        .right-lead {
+            right: -40px;
+        }
+        
+        .band-labels {
+            display: flex;
+            justify-content: space-between;
+            max-width: 400px;
+            margin: 10px auto 0;
+        }
+        
+        .band-label-small {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--dark);
+            width: 18px;
+            text-align: center;
+        }
+        
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        @media (max-width: 480px) {
+            .result-details {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .detail-box {
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .detail-box h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .detail-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        /* Color Code Guide */
+        .color-guide {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+        
+        .color-guide h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .color-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .color-table th, .color-table td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .color-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .color-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .color-cell {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+        
+        .instructions {
+            background-color: #fff8e1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .instructions h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        /* Switch Mode */
+        .switch-mode {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .switch-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .switch-btn:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-exchange-alt logo-icon"></i>
+                <h1>Resistance Calculator - Dual Function</h1>
+            </div>
+            <p class="subtitle">Calculate resistance from color code OR color code from resistance value - Two-way calculator</p>
+            
+            <div class="mode-selector">
+                <button class="mode-btn active" id="modeValueToColor">
+                    <i class="fas fa-calculator"></i> Value → Color Code
+                </button>
+                <button class="mode-btn" id="modeColorToValue">
+                    <i class="fas fa-palette"></i> Color Code → Value
+                </button>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <!-- Input Section -->
+            <section class="input-section">
+                <!-- Value to Color Mode -->
+                <div id="valueToColorSection">
+                    <h2 class="result-title"><i class="fas fa-calculator"></i> Enter Resistance Value</h2>
+                    
+                    <div class="input-group">
+                        <label for="resistanceValue">Resistance Value</label>
+                        <input type="text" id="resistanceValue" class="resistance-input" placeholder="e.g., 4700 or 4.7k" value="4700">
+                        
+                        <div class="unit-selector">
+                            <div class="unit-option active" data-unit="ohm">Ω (Ohms)</div>
+                            <div class="unit-option" data-unit="kohm">kΩ (kilo-ohms)</div>
+                            <div class="unit-option" data-unit="mohm">MΩ (mega-ohms)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Tolerance</label>
+                        <div class="tolerance-selector">
+                            <div class="tolerance-option active" data-tolerance="1">±1% (Brown)</div>
+                            <div class="tolerance-option" data-tolerance="2">±2% (Red)</div>
+                            <div class="tolerance-option" data-tolerance="5">±5% (Gold)</div>
+                            <div class="tolerance-option" data-tolerance="10">±10% (Silver)</div>
+                        </div>
+                    </div>
+                    
+                    <button id="calculateValueToColor" class="calculate-btn">
+                        <i class="fas fa-calculator"></i> Calculate Color Code
+                    </button>
+                    
+                    <div class="switch-mode">
+                        Want to calculate value from colors? 
+                        <button class="switch-btn" id="switchToColorMode">Switch to Color → Value mode</button>
+                    </div>
+                </div>
+                
+                <!-- Color to Value Mode -->
+                <div id="colorToValueSection" class="color-picker-section">
+                    <h2 class="result-title"><i class="fas fa-palette"></i> Select Color Bands</h2>
+                    
+                    <div class="color-selection">
+                        <!-- Band 1 -->
+                        <div class="color-band-selector">
+                            <div class="band-label">1st Digit</div>
+                            <select class="color-dropdown" id="band1Select">
+                                <option value="black">Black (0)</option>
+                                <option value="brown">Brown (1)</option>
+                                <option value="red">Red (2)</option>
+                                <option value="orange">Orange (3)</option>
+                                <option value="yellow" selected>Yellow (4)</option>
+                                <option value="green">Green (5)</option>
+                                <option value="blue">Blue (6)</option>
+                                <option value="violet">Violet (7)</option>
+                                <option value="gray">Gray (8)</option>
+                                <option value="white">White (9)</option>
+                            </select>
+                            <div class="color-preview" id="band1Preview"></div>
+                        </div>
+                        
+                        <!-- Band 2 -->
+                        <div class="color-band-selector">
+                            <div class="band-label">2nd Digit</div>
+                            <select class="color-dropdown" id="band2Select">
+                                <option value="black">Black (0)</option>
+                                <option value="brown">Brown (1)</option>
+                                <option value="red">Red (2)</option>
+                                <option value="orange">Orange (3)</option>
+                                <option value="yellow">Yellow (4)</option>
+                                <option value="green">Green (5)</option>
+                                <option value="blue">Blue (6)</option>
+                                <option value="violet" selected>Violet (7)</option>
+                                <option value="gray">Gray (8)</option>
+                                <option value="white">White (9)</option>
+                            </select>
+                            <div class="color-preview" id="band2Preview"></div>
+                        </div>
+                        
+                        <!-- Band 3 (Multiplier) -->
+                        <div class="color-band-selector">
+                            <div class="band-label">Multiplier</div>
+                            <select class="color-dropdown" id="band3Select">
+                                <option value="silver">Silver (×0.01)</option>
+                                <option value="gold">Gold (×0.1)</option>
+                                <option value="black">Black (×1)</option>
+                                <option value="brown">Brown (×10)</option>
+                                <option value="red" selected>Red (×100)</option>
+                                <option value="orange">Orange (×1000)</option>
+                                <option value="yellow">Yellow (×10k)</option>
+                                <option value="green">Green (×100k)</option>
+                                <option value="blue">Blue (×1M)</option>
+                                <option value="violet">Violet (×10M)</option>
+                                <option value="gray">Gray (×100M)</option>
+                                <option value="white">White (×1G)</option>
+                            </select>
+                            <div class="color-preview" id="band3Preview"></div>
+                        </div>
+                        
+                        <!-- Band 4 (Tolerance) -->
+                        <div class="color-band-selector">
+                            <div class="band-label">Tolerance</div>
+                            <select class="color-dropdown" id="band4Select">
+                                <option value="silver">Silver (±10%)</option>
+                                <option value="gold" selected>Gold (±5%)</option>
+                                <option value="brown">Brown (±1%)</option>
+                                <option value="red">Red (±2%)</option>
+                                <option value="green">Green (±0.5%)</option>
+                                <option value="blue">Blue (±0.25%)</option>
+                                <option value="violet">Violet (±0.1%)</option>
+                                <option value="gray">Gray (±0.05%)</option>
+                            </select>
+                            <div class="color-preview" id="band4Preview"></div>
+                        </div>
+                    </div>
+                    
+                    <button id="calculateColorToValue" class="calculate-btn reverse-btn">
+                        <i class="fas fa-exchange-alt"></i> Calculate Resistance Value
+                    </button>
+                    
+                    <div class="switch-mode">
+                        Want to calculate colors from value? 
+                        <button class="switch-btn" id="switchToValueMode">Switch to Value → Color mode</button>
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    <h3><i class="fas fa-info-circle"></i> How to Use</h3>
+                    <ul id="instructionsText">
+                        <li><strong>Value → Color mode:</strong> Enter resistance value, select unit and tolerance, then click "Calculate Color Code"</li>
+                        <li><strong>Color → Value mode:</strong> Select colors for each band from dropdowns, then click "Calculate Resistance Value"</li>
+                        <li>Results will show both the resistance value with tolerance and the visual resistor with color bands</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Result Section -->
+            <section class="result-section">
+                <h2 class="result-title"><i class="fas fa-exchange-alt"></i> Calculation Result</h2>
+                
+                <div class="resistor-display">
+                    <h3 id="resultType">4-Band Resistor (Value → Color)</h3>
+                    <div class="resistor-body" id="resistorDisplay">
+                        <div class="resistor-lead left-lead"></div>
+                        <div class="resistor-band" id="band1"></div>
+                        <div class="resistor-band" id="band2"></div>
+                        <div class="resistor-band" id="band3"></div>
+                        <div class="resistor-band" id="band4"></div>
+                        <div class="resistor-lead right-lead"></div>
+                    </div>
+                    <div class="band-labels">
+                        <div class="band-label-small">1st</div>
+                        <div class="band-label-small">2nd</div>
+                        <div class="band-label-small">Multiplier</div>
+                        <div class="band-label-small">Tolerance</div>
+                    </div>
+                </div>
+                
+                <div class="result-details">
+                    <div class="detail-box">
+                        <h4>Resistance Value</h4>
+                        <div class="detail-value" id="resultValue">4.7 kΩ</div>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Tolerance</h4>
+                        <div class="detail-value" id="resultTolerance">±5%</div>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Color Code</h4>
+                        <div class="detail-value" id="colorCode">Yellow-Violet-Red-Gold</div>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Numeric Code</h4>
+                        <div class="detail-value" id="numericCode">4-7-2-5</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Color Code Guide -->
+        <section class="color-guide">
+            <h2><i class="fas fa-table"></i> Resistor Color Code Guide</h2>
+            <table class="color-table">
+                <thead>
+                    <tr>
+                        <th>Color</th>
+                        <th>Digit</th>
+                        <th>Multiplier</th>
+                        <th>Tolerance</th>
+                    </tr>
+                </thead>
+                <tbody id="colorTableBody">
+                    <!-- Color table rows will be generated by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+        
+        <footer>
+            <p>Dual Function Resistance Color Code Calculator &copy; 2023 | Electrical Engineering Tool</p>
+            <p>Calculate in both directions: Resistance Value ↔ Color Code Bands</p>
+        </footer>
+    </div>
+
+    <script>
+        // Color code data with all properties
+        const colorData = {
+            black: { digit: 0, multiplier: 1, tolerance: null, hex: "#000000", textColor: "#ffffff" },
+            brown: { digit: 1, multiplier: 10, tolerance: "±1%", hex: "#8B4513", textColor: "#ffffff" },
+            red: { digit: 2, multiplier: 100, tolerance: "±2%", hex: "#FF0000", textColor: "#ffffff" },
+            orange: { digit: 3, multiplier: 1000, tolerance: null, hex: "#FFA500", textColor: "#000000" },
+            yellow: { digit: 4, multiplier: 10000, tolerance: null, hex: "#FFFF00", textColor: "#000000" },
+            green: { digit: 5, multiplier: 100000, tolerance: "±0.5%", hex: "#008000", textColor: "#ffffff" },
+            blue: { digit: 6, multiplier: 1000000, tolerance: "±0.25%", hex: "#0000FF", textColor: "#ffffff" },
+            violet: { digit: 7, multiplier: 10000000, tolerance: "±0.1%", hex: "#EE82EE", textColor: "#000000" },
+            gray: { digit: 8, multiplier: 100000000, tolerance: "±0.05%", hex: "#808080", textColor: "#ffffff" },
+            white: { digit: 9, multiplier: 1000000000, tolerance: null, hex: "#FFFFFF", textColor: "#000000", border: "1px solid #ccc" },
+            gold: { digit: null, multiplier: 0.1, tolerance: "±5%", hex: "#FFD700", textColor: "#000000" },
+            silver: { digit: null, multiplier: 0.01, tolerance: "±10%", hex: "#C0C0C0", textColor: "#000000" }
+        };
+
+        // Tolerance mapping for value to color
+        const toleranceMapping = {
+            "1": "brown",
+            "2": "red", 
+            "5": "gold",
+            "10": "silver"
+        };
+
+        // Multiplier mapping for color to value
+        const multiplierMapping = {
+            "silver": 0.01,
+            "gold": 0.1,
+            "black": 1,
+            "brown": 10,
+            "red": 100,
+            "orange": 1000,
+            "yellow": 10000,
+            "green": 100000,
+            "blue": 1000000,
+            "violet": 10000000,
+            "gray": 100000000,
+            "white": 1000000000
+        };
+
+        // Tolerance value mapping for color to value
+        const toleranceValueMapping = {
+            "silver": "10",
+            "gold": "5",
+            "brown": "1",
+            "red": "2",
+            "green": "0.5",
+            "blue": "0.25",
+            "violet": "0.1",
+            "gray": "0.05"
+        };
+
+        // DOM Elements
+        // Mode elements
+        const modeValueToColorBtn = document.getElementById('modeValueToColor');
+        const modeColorToValueBtn = document.getElementById('modeColorToValue');
+        const valueToColorSection = document.getElementById('valueToColorSection');
+        const colorToValueSection = document.getElementById('colorToValueSection');
+        const switchToColorModeBtn = document.getElementById('switchToColorMode');
+        const switchToValueModeBtn = document.getElementById('switchToValueMode');
+        const instructionsText = document.getElementById('instructionsText');
+        const resultType = document.getElementById('resultType');
+        
+        // Value to Color elements
+        const resistanceInput = document.getElementById('resistanceValue');
+        const unitOptions = document.querySelectorAll('.unit-option');
+        const toleranceOptions = document.querySelectorAll('.tolerance-option');
+        const calculateValueToColorBtn = document.getElementById('calculateValueToColor');
+        
+        // Color to Value elements
+        const band1Select = document.getElementById('band1Select');
+        const band2Select = document.getElementById('band2Select');
+        const band3Select = document.getElementById('band3Select');
+        const band4Select = document.getElementById('band4Select');
+        const band1Preview = document.getElementById('band1Preview');
+        const band2Preview = document.getElementById('band2Preview');
+        const band3Preview = document.getElementById('band3Preview');
+        const band4Preview = document.getElementById('band4Preview');
+        const calculateColorToValueBtn = document.getElementById('calculateColorToValue');
+        
+        // Result elements
+        const resistorBands = [
+            document.getElementById('band1'),
+            document.getElementById('band2'),
+            document.getElementById('band3'),
+            document.getElementById('band4')
+        ];
+        
+        const resultValue = document.getElementById('resultValue');
+        const resultTolerance = document.getElementById('resultTolerance');
+        const colorCode = document.getElementById('colorCode');
+        const numericCode = document.getElementById('numericCode');
+        const colorTableBody = document.getElementById('colorTableBody');
+
+        // Current state
+        let currentUnit = 'ohm';
+        let currentTolerance = '5';
+        let currentMode = 'valueToColor';
+
+        // Initialize color table
+        function initColorTable() {
+            colorTableBody.innerHTML = '';
+            
+            Object.entries(colorData).forEach(([colorName, color]) => {
+                const row = document.createElement('tr');
+                
+                // Color cell with visual representation
+                const colorCell = document.createElement('td');
+                colorCell.textContent = colorName.charAt(0).toUpperCase() + colorName.slice(1);
+                row.appendChild(colorCell);
+                
+                // Digit
+                const digitCell = document.createElement('td');
+                digitCell.textContent = color.digit !== null ? color.digit : '-';
+                row.appendChild(digitCell);
+                
+                // Multiplier
+                const multiplierCell = document.createElement('td');
+                multiplierCell.textContent = formatMultiplier(color.multiplier);
+                row.appendChild(multiplierCell);
+                
+                // Tolerance
+                const toleranceCell = document.createElement('td');
+                toleranceCell.textContent = color.tolerance || '-';
+                row.appendChild(toleranceCell);
+                
+                colorTableBody.appendChild(row);
+            });
+        }
+
+        // Format multiplier for display
+        function formatMultiplier(value) {
+            if (value >= 1000000) return `${value/1000000}M`;
+            if (value >= 1000) return `${value/1000}k`;
+            if (value < 1) return value.toString();
+            return value.toString();
+        }
+
+        // Format resistance value for display
+        function formatResistance(value) {
+            if (value >= 1000000) return (value/1000000).toFixed(2) + " MΩ";
+            if (value >= 1000) return (value/1000).toFixed(2) + " kΩ";
+            return value.toFixed(0) + " Ω";
+        }
+
+        // Switch between modes
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            if (mode === 'valueToColor') {
+                modeValueToColorBtn.classList.add('active');
+                modeColorToValueBtn.classList.remove('active');
+                valueToColorSection.style.display = 'block';
+                colorToValueSection.classList.remove('active');
+                resultType.textContent = "4-Band Resistor (Value → Color)";
+            } else {
+                modeValueToColorBtn.classList.remove('active');
+                modeColorToValueBtn.classList.add('active');
+                valueToColorSection.style.display = 'none';
+                colorToValueSection.classList.add('active');
+                resultType.textContent = "4-Band Resistor (Color → Value)";
+            }
+        }
+
+        // Parse resistance input
+        function parseResistance(input) {
+            input = input.trim().toLowerCase();
+            
+            // Extract numeric value
+            let numericValue = parseFloat(input);
+            
+            // Check for unit indicators
+            if (input.includes('k')) {
+                numericValue *= 1000;
+            } else if (input.includes('m')) {
+                numericValue *= 1000000;
+            }
+            
+            return numericValue;
+        }
+
+        // Calculate color bands from resistance value
+        function calculateColorBands(resistance, tolerancePercent) {
+            let ohms = resistance;
+            
+            // Handle very small resistance values
+            if (ohms < 1) {
+                ohms = 1;
+            }
+            
+            // Convert to standard form (AB x 10^C)
+            let exponent = Math.floor(Math.log10(ohms));
+            let mantissa = ohms / Math.pow(10, exponent);
+            
+            // Handle cases where mantissa is not between 10 and 99
+            if (mantissa < 10) {
+                mantissa *= 10;
+                exponent -= 1;
+            }
+            
+            // Ensure mantissa is between 10 and 99
+            mantissa = Math.min(Math.max(mantissa, 10), 99);
+            
+            const firstDigit = Math.floor(mantissa / 10);
+            const secondDigit = Math.floor(mantissa % 10);
+            const multiplierValue = Math.pow(10, exponent - 1);
+            
+            // Find the closest standard multiplier
+            const standardMultipliers = [0.01, 0.1, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000];
+            let closestMultiplier = standardMultipliers[0];
+            let minDiff = Math.abs(multiplierValue - closestMultiplier);
+            
+            for (let i = 1; i < standardMultipliers.length; i++) {
+                const diff = Math.abs(multiplierValue - standardMultipliers[i]);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestMultiplier = standardMultipliers[i];
+                }
+            }
+            
+            // Find colors
+            let digit1ColorName = Object.keys(colorData).find(key => colorData[key].digit === firstDigit);
+            let digit2ColorName = Object.keys(colorData).find(key => colorData[key].digit === secondDigit);
+            let multiplierColorName = Object.keys(colorData).find(key => Math.abs(colorData[key].multiplier - closestMultiplier) < 0.0001);
+            let toleranceColorName = toleranceMapping[tolerancePercent];
+            
+            // Fallback if not found
+            if (!digit1ColorName) digit1ColorName = "black";
+            if (!digit2ColorName) digit2ColorName = "black";
+            if (!multiplierColorName) multiplierColorName = "black";
+            if (!toleranceColorName) toleranceColorName = "gold";
+            
+            return {
+                digit1: { name: digit1ColorName, ...colorData[digit1ColorName] },
+                digit2: { name: digit2ColorName, ...colorData[digit2ColorName] },
+                multiplier: { name: multiplierColorName, ...colorData[multiplierColorName] },
+                tolerance: { name: toleranceColorName, ...colorData[toleranceColorName] },
+                actualResistance: (firstDigit * 10 + secondDigit) * closestMultiplier
+            };
+        }
+
+        // Calculate resistance value from color bands
+        function calculateValueFromColors(band1Color, band2Color, band3Color, band4Color) {
+            // Get digit values
+            const digit1 = colorData[band1Color].digit;
+            const digit2 = colorData[band2Color].digit;
+            const multiplier = multiplierMapping[band3Color];
+            const toleranceValue = toleranceValueMapping[band4Color];
+            
+            // Calculate resistance
+            const resistance = (digit1 * 10 + digit2) * multiplier;
+            
+            return {
+                resistance,
+                toleranceValue,
+                colors: {
+                    digit1: { name: band1Color, ...colorData[band1Color] },
+                    digit2: { name: band2Color, ...colorData[band2Color] },
+                    multiplier: { name: band3Color, ...colorData[band3Color] },
+                    tolerance: { name: band4Color, ...colorData[band4Color] }
+                }
+            };
+        }
+
+        // Update resistor display
+        function updateResistorDisplay(colors) {
+            // Update band colors
+            resistorBands[0].style.backgroundColor = colors.digit1.hex;
+            resistorBands[1].style.backgroundColor = colors.digit2.hex;
+            resistorBands[2].style.backgroundColor = colors.multiplier.hex;
+            resistorBands[3].style.backgroundColor = colors.tolerance.hex;
+            
+            // Update text color for better contrast
+            resistorBands[0].style.color = colors.digit1.textColor;
+            resistorBands[1].style.color = colors.digit2.textColor;
+            resistorBands[2].style.color = colors.multiplier.textColor;
+            resistorBands[3].style.color = colors.tolerance.textColor;
+            
+            // Format color names for display
+            const digit1Name = colors.digit1.name.charAt(0).toUpperCase() + colors.digit1.name.slice(1);
+            const digit2Name = colors.digit2.name.charAt(0).toUpperCase() + colors.digit2.name.slice(1);
+            const multiplierName = colors.multiplier.name.charAt(0).toUpperCase() + colors.multiplier.name.slice(1);
+            const toleranceName = colors.tolerance.name.charAt(0).toUpperCase() + colors.tolerance.name.slice(1);
+            
+            // Update result details
+            colorCode.textContent = `${digit1Name}-${digit2Name}-${multiplierName}-${toleranceName}`;
+            
+            // Numeric code
+            const digit1Num = colors.digit1.digit !== null ? colors.digit1.digit : 'X';
+            const digit2Num = colors.digit2.digit !== null ? colors.digit2.digit : 'X';
+            const multiplierNum = getMultiplierCode(colors.multiplier.multiplier);
+            const toleranceNum = getToleranceCode(colors.tolerance.name);
+            
+            numericCode.textContent = `${digit1Num}-${digit2Num}-${multiplierNum}-${toleranceNum}`;
+        }
+
+        // Helper function to get multiplier code
+        function getMultiplierCode(multiplier) {
+            // Find color with this multiplier
+            const colorName = Object.keys(colorData).find(key => colorData[key].multiplier === multiplier);
+            if (!colorName) return '?';
+            
+            if (colorName === 'silver') return 'S';
+            if (colorName === 'gold') return 'G';
+            
+            const color = colorData[colorName];
+            return color.digit !== null ? color.digit : 'X';
+        }
+
+        // Helper function to get tolerance code
+        function getToleranceCode(colorName) {
+            switch(colorName) {
+                case 'brown': return 1;
+                case 'red': return 2;
+                case 'gold': return 5;
+                case 'silver': return 10;
+                case 'green': return 0.5;
+                case 'blue': return 0.25;
+                case 'violet': return 0.1;
+                case 'gray': return 0.05;
+                default: return '?';
+            }
+        }
+
+        // Update color previews
+        function updateColorPreviews() {
+            const band1Color = band1Select.value;
+            const band2Color = band2Select.value;
+            const band3Color = band3Select.value;
+            const band4Color = band4Select.value;
+            
+            band1Preview.style.backgroundColor = colorData[band1Color].hex;
+            band2Preview.style.backgroundColor = colorData[band2Color].hex;
+            band3Preview.style.backgroundColor = colorData[band3Color].hex;
+            band4Preview.style.backgroundColor = colorData[band4Color].hex;
+            
+            // Add border for white color
+            band1Preview.style.border = band1Color === 'white' ? '1px solid #ccc' : '1px solid #ccc';
+            band2Preview.style.border = band2Color === 'white' ? '1px solid #ccc' : '1px solid #ccc';
+            band3Preview.style.border = band3Color === 'white' ? '1px solid #ccc' : '1px solid #ccc';
+            band4Preview.style.border = band4Color === 'white' ? '1px solid #ccc' : '1px solid #ccc';
+        }
+
+        // Event Listeners
+        // Mode switching
+        modeValueToColorBtn.addEventListener('click', () => switchMode('valueToColor'));
+        modeColorToValueBtn.addEventListener('click', () => switchMode('colorToValue'));
+        switchToColorModeBtn.addEventListener('click', () => switchMode('colorToValue'));
+        switchToValueModeBtn.addEventListener('click', () => switchMode('valueToColor'));
+
+        // Unit selection
+        unitOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                unitOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                currentUnit = this.getAttribute('data-unit');
+            });
+        });
+
+        // Tolerance selection
+        toleranceOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                toleranceOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                currentTolerance = this.getAttribute('data-tolerance');
+            });
+        });
+
+        // Color dropdown changes
+        band1Select.addEventListener('change', updateColorPreviews);
+        band2Select.addEventListener('change', updateColorPreviews);
+        band3Select.addEventListener('change', updateColorPreviews);
+        band4Select.addEventListener('change', updateColorPreviews);
+
+        // Calculate from value to color
+        calculateValueToColorBtn.addEventListener('click', function() {
+            const inputValue = resistanceInput.value;
+            if (!inputValue || isNaN(parseFloat(inputValue))) {
+                alert('Please enter a valid resistance value');
+                return;
+            }
+            
+            const resistance = parseResistance(inputValue);
+            if (resistance <= 0) {
+                alert('Resistance value must be positive');
+                return;
+            }
+            
+            const colors = calculateColorBands(resistance, currentTolerance);
+            updateResistorDisplay(colors);
+            
+            // Update result value and tolerance
+            resultValue.textContent = formatResistance(colors.actualResistance);
+            resultTolerance.textContent = colors.tolerance.tolerance || "±5%";
+        });
+
+        // Calculate from color to value
+        calculateColorToValueBtn.addEventListener('click', function() {
+            const band1Color = band1Select.value;
+            const band2Color = band2Select.value;
+            const band3Color = band3Select.value;
+            const band4Color = band4Select.value;
+            
+            const result = calculateValueFromColors(band1Color, band2Color, band3Color, band4Color);
+            updateResistorDisplay(result.colors);
+            
+            // Update result value and tolerance
+            resultValue.textContent = formatResistance(result.resistance);
+            resultTolerance.textContent = result.colors.tolerance.tolerance || "±5%";
+        });
+
+        // Calculate on Enter key in resistance input
+        resistanceInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateValueToColorBtn.click();
+            }
+        });
+
+        // Initialize the page
+        function init() {
+            initColorTable();
+            updateColorPreviews();
+            
+            // Calculate initial example
+            const resistance = parseResistance(resistanceInput.value);
+            const colors = calculateColorBands(resistance, currentTolerance);
+            updateResistorDisplay(colors);
+            resultValue.textContent = formatResistance(colors.actualResistance);
+            resultTolerance.textContent = colors.tolerance.tolerance || "±5%";
+        }
+
+        // Initialize when page loads
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
